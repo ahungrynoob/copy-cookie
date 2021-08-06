@@ -7,7 +7,7 @@ const onCopyButtonClick = () => {
         },
         tab => {
             chrome.cookies.getAll({ url: tab[0].url }, cookie => {
-                localStorage.copyCookieData = btoa(JSON.stringify(cookie));
+                localStorage.copyCookieData = JSON.stringify(cookie);
                 setTimeout(() => handlePopupUI('copy'), 50); // Buffer time to set local storage
             });
         },
@@ -34,7 +34,7 @@ const setNewCookies = (cookies, index, url, domain, callback) => {
             value,
             path,
             domain,
-        }, () => setNewCookies(cookies, index + 1, url, callback));
+        }, () => setNewCookies(cookies, index + 1, url, domain, callback));
     } catch (e) {
         console.warn(`There was an error setting the cookies: ${error}`);
     }
@@ -45,7 +45,7 @@ const onPasteButtonClick = () => {
     let copyCookieData;
     try {
         copyCookieData = localStorage.copyCookieData
-            ? JSON.parse(atob(localStorage.copyCookieData))
+            ? JSON.parse(localStorage.copyCookieData)
             : null;
     } catch (e) {
         return alert('Error parsing cookies. Please try again.');
@@ -53,7 +53,6 @@ const onPasteButtonClick = () => {
 
     if (!copyCookieData)
         return alert('Oh Man! You need to copy the cookies first.');
-
     let domain = document.getElementById('domainInput').value.trim();
     if (!domain) domain = 'localhost';
 
