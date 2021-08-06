@@ -73,8 +73,8 @@ const onPasteButtonClick = () => {
             }
             
             chrome.cookies.getAll({ url: tab[0].url }, cookies => {
-                removeCookies(cookies, 0, tab[0].url, domain, () => {
-                    setNewCookies(copyCookieData, 0, tab[0].url, () => {
+                removeCookies(cookies, 0, tab[0].url, () => {
+                    setNewCookies(copyCookieData, 0, tab[0].url, domain, () => {
                         spinner.setAttribute('style', 'display: none;');
                         return onResetButtonClick('paste');
                     });
